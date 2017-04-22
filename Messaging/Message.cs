@@ -1,35 +1,48 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Qubitus.Taygeta.Messaging
 {
-    public class Message<T> : IMessage<T> 
+    public abstract class Message<T> : IMessage<T> 
     {
-        public string Identifier { get; private set; }
+        public string Identifier { get; }
 
-        public Metadata<T> Metadata { get; private set; }
+        public abstract T Payload { get; }
+        object IMessage.Payload => Payload;
 
-        public T Payload { get; private set; }
+        public abstract Metadata Metadata { get; }
 
         public Message(string identifier)
         {
             Identifier = identifier;
         }
 
-        public Message(T payload)
-            : this(payload, Metadata.Empty)
+        IMessage IMessage.WithMetadata(IDictionary<string, object> metadata)
         {
-        }
-        
-        public Message(Message original, Metadata<T> metadata)
-            : this(original.Identifier, original.Payload, Metadata.From(metadata))
-        {
+            return WithMetadata(metadata);
         }
 
-        public Message(string identifier, T payload, Metadata<T> metadata)
+        IMessage IMessage.WithMetadataUnion(IDictionary<string, object> metadata)
         {
-            Identifier = identifier;
-            Payload = payload
-            Metadata = metadata;
+            return WithMetadataUnion(metadata);
         }
+
+        public IMessage<T> WithMetadata(IDictionary<string, object> metadata)
+        {
+            if (Metadata.Equals(metadata))
+                return this;
+            
+            return WithMetadata(Metadata.From(metadata));
+        }
+
+        public IMessage<T> WithMetadataUnion(IDictionary<string, object> metadata)
+        {
+            if (!metadata.Any())
+                return this;
+            
+            return WithMetadata(Metadata.Union(metadata));
+        }
+
+        protected abstract Message<T> WithMetadata(Metadata metadata);
     }
 }

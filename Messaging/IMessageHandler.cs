@@ -1,8 +1,8 @@
 namespace Qubitus.Taygeta.Messaging
 {
-    public class Metadata<T>
+    public interface MessageHandler<T>
         where T : IMessage
     {
-        
+        object Handle(T message);
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -63,14 +62,21 @@ namespace Qubitus.Taygeta.Messaging
             return new Metadata(filteredPairs.ToDictionary(kv => kv.Key, kv => kv.Value));
         }
 
-        public static Metadata From(IDictionary<string, object> dictionary)
-        {
-            return new Metadata(new Dictionary<string, object>(dictionary));
-        }
-
-        public static Metadata With(string key, object value)
+        public static Metadata From(string key, object value)
         {
             return new Metadata(new Dictionary<string, object> { { key, value } });
+        }
+
+        public static Metadata From(IDictionary<string, object> metadata)
+        {
+            if (metadata == null || !metadata.Any())
+                return Metadata.Empty;
+
+            var result = metadata as Metadata;
+            if (result == null)
+                result = new Metadata(metadata);
+
+            return result;
         }
     }
 }
