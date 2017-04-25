@@ -12,7 +12,6 @@ namespace Qubitus.Taygeta.Messaging
         private Metadata()
             : this(new Dictionary<string, Object>())
         {
-
         }
 
         private Metadata(IDictionary<string, object> dictionary) 
