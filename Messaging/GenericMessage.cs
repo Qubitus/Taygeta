@@ -1,13 +1,13 @@
+using System;
 using System.Collections.Generic;
 
 namespace Qubitus.Taygeta.Messaging
 {
     public class GenericMessage<T> : Message<T>
     {
+        public override T Payload { get; }
         
-        public T Payload { get; }
-        
-        public Metadata Metadata { get; }
+        public override Metadata Metadata { get; }
 
         public GenericMessage(T payload)
             : this(payload, Metadata.Empty)
@@ -26,11 +26,16 @@ namespace Qubitus.Taygeta.Messaging
             Metadata = Metadata.From(metadata);
         }
 
-        private Message(string identifier, T payload, Metadata metadata)
-            : base(identifier)
+        public GenericMessage(GenericMessage<T> original, Metadata metadata)
+            : base(original.Identifier)
         {
-            Payload = payload;
+            Payload = original.Payload;
             Metadata = metadata;
+        }
+
+        protected override Message<T> WithMetadata(Metadata metadata)
+        {
+            return new GenericMessage<T>(this, metadata);
         }
     }
 }
