@@ -6,10 +6,8 @@ namespace Qubitus.Taygeta.Messaging
     public abstract class Message<T> : IMessage<T> 
     {
         public string Identifier { get; }
-
-        public abstract T Payload { get; }
         object IMessage.Payload => Payload;
-
+        public abstract T Payload { get; }
         public abstract Metadata Metadata { get; }
 
         public Message(string identifier)

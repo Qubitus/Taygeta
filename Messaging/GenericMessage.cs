@@ -6,7 +6,6 @@ namespace Qubitus.Taygeta.Messaging
     public class GenericMessage<T> : Message<T>
     {
         public override T Payload { get; }
-        
         public override Metadata Metadata { get; }
 
         public GenericMessage(T payload)

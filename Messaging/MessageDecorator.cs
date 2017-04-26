@@ -1,46 +1,57 @@
 using System;
 using System.Collections.Generic;
+using Qubitus.Taygeta.Serialization;
 
 namespace Qubitus.Taygeta.Messaging
 {
-    public abstract class MessageDecorator<T> : IMessage<T>
+    public abstract class MessageDecorator<T> : IMessage<T>, ISerializationAware
     {
-        protected IMessage<T> Message;
+        private volatile SerializedObjectHolder _serializedObjectHolder;
 
-        public string Identifier => Message.Identifier;
+        protected IMessage<T> Delegate;
+        public string Identifier => Delegate.Identifier;
+        object IMessage.Payload => Payload;
+        public T Payload => Delegate.Payload;
+        public Metadata Metadata => Delegate.Metadata;
 
-        public T Payload => Message.Payload;
-
-        public Metadata Metadata => Message.Metadata;
+        private SerializedObjectHolder SerializedObjectHolder
+        {
+            get
+            {
+                if (_serializedObjectHolder == null)
+                    _serializedObjectHolder = new SerializedObjectHolder(Delegate);
+                
+                return _serializedObjectHolder;
+            }
+        }
 
         protected MessageDecorator(IMessage<T> message)
         {
-            Message = message;
+            Delegate = message;
         }
 
+        public abstract IMessage<T> WithMetadata(IDictionary<string, object> metadata);
+        public abstract IMessage<T> WithMetadataUnion(IDictionary<string, object> metadata);
 
+        IMessage IMessage.WithMetadata(IDictionary<string, object> metadata) => WithMetadata(metadata);
+        IMessage IMessage.WithMetadataUnion(IDictionary<string, object> metadata) => WithMetadataUnion(metadata);
 
-
-        object IMessage.Payload => throw new NotImplementedException();
-
-        public IMessage<T> WithMetadata(IDictionary<string, object> metadata)
+        public ISerializedObject<TTarget> SerializePayload<TTarget>(ISerializer serializer)
         {
-            throw new NotImplementedException();
+            var typedDelegate = Delegate as ISerializationAware;
+            if (typedDelegate != null)
+                return typedDelegate.SerializePayload<TTarget>(serializer);
+
+            return SerializedObjectHolder.SerializePayload<TTarget>(serializer);
         }
 
-        public IMessage<T> WithMetadataUnion(IDictionary<string, object> metadata)
+        public ISerializedObject<TTarget> SerializeMetadata<TTarget>(ISerializer serializer)
         {
-            throw new NotImplementedException();
-        }
-
-        IMessage IMessage.WithMetadata(IDictionary<string, object> metadata)
-        {
-            throw new NotImplementedException();
-        }
-
-        IMessage IMessage.WithMetadataUnion(IDictionary<string, object> metadata)
-        {
-            throw new NotImplementedException();
+            var typedDelegate = Delegate as ISerializationAware;
+            if (typedDelegate != null)
+                return typedDelegate.SerializeMetadata<TTarget>(serializer);
+            
+            return SerializedObjectHolder.SerializeMetadata<TTarget>(serializer);
         }
     }
 }

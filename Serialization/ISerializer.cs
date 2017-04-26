@@ -1,11 +1,12 @@
 namespace Qubitus.Taygeta.Serialization
 {
-    public interface Serializer
+    public interface ISerializer
     {
-        ISerializedObject<TTarget> Serialize<TTarget>(object source);
-
+        IConverter Converter { get; }
+        
         bool CanSerializeTo<TTarget>();
-
+        
+        ISerializedObject<TTarget> Serialize<TTarget>(object source);
         TTarget Deserialize<TSource, TTarget>(ISerializedObject<TSource> serializedObject);
     }
 }

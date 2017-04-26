@@ -5,9 +5,7 @@ namespace Qubitus.Taygeta.Messaging
     public interface IMessage
     {
         string Identifier { get; }
-
         object Payload { get; }
-
         Metadata Metadata { get; }
 
         IMessage WithMetadata(IDictionary<string, object> metadata);
