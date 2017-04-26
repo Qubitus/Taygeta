@@ -10,7 +10,7 @@ namespace Qubitus.Taygeta.Messaging
         public static Metadata Empty { get; } = new Metadata();
 
         private Metadata()
-            : this(new Dictionary<string, Object>())
+            : this(new Dictionary<string, object>())
         {
         }
 

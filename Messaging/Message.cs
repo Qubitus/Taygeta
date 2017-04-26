@@ -15,16 +15,6 @@ namespace Qubitus.Taygeta.Messaging
             Identifier = identifier;
         }
 
-        IMessage IMessage.WithMetadata(IDictionary<string, object> metadata)
-        {
-            return WithMetadata(metadata);
-        }
-
-        IMessage IMessage.WithMetadataUnion(IDictionary<string, object> metadata)
-        {
-            return WithMetadataUnion(metadata);
-        }
-
         public IMessage<T> WithMetadata(IDictionary<string, object> metadata)
         {
             if (Metadata.Equals(metadata))
@@ -42,5 +32,8 @@ namespace Qubitus.Taygeta.Messaging
         }
 
         protected abstract Message<T> WithMetadata(Metadata metadata);
+
+        IMessage IMessage.WithMetadata(IDictionary<string, object> metadata) => WithMetadata(metadata);
+        IMessage IMessage.WithMetadataUnion(IDictionary<string, object> metadata) => WithMetadataUnion(metadata);
     }
 }
