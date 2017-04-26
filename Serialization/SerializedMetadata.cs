@@ -7,8 +7,11 @@ namespace Qubitus.Taygeta.Serialization
     {
         private readonly SimpleSerializedObject<T> _delegate;
 
-        public T Data => _delegate.Data;
-        public ISerializedType Type => _delegate.Type;
+        public T Content => _delegate.Content;
+        object ISerializedObject.Content => Content;
+        
+        public Type ContentType => _delegate.ContentType;
+        public ISerializedType SerializedType => _delegate.SerializedType;
 
         public SerializedMetadata(T data)
         {

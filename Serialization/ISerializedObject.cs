@@ -1,13 +1,17 @@
+using System;
+
 namespace Qubitus.Taygeta.Serialization
 {
     public interface ISerializedObject
     {
-        object Data { get; }
-        ISerializedType Type { get; }
+        Type ContentType { get; }
+        ISerializedType SerializedType { get; }
+
+        object Content { get; }
     }
 
     public interface ISerializedObject<out T> : ISerializedObject
     {
-        new T Data { get; }
+        new T Content { get; }
     }
 }

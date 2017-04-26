@@ -5,8 +5,8 @@ namespace Qubitus.Taygeta.Serialization
         bool CanConvert<TSource, TTarget>();
 
         TTarget Convert<TTarget>(object source);
-        TTarget Convert<TSource, TTarget>(object original);
+        TTarget Convert<TSource, TTarget>(TSource original);
         
-        ISerializedObject<TTarget> Convert<TTarget>(ISerializedObject<object> original);
+        ISerializedObject<TTarget> Convert<TTarget>(ISerializedObject original);
     }
 }

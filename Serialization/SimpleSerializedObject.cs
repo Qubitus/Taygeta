@@ -4,8 +4,11 @@ namespace Qubitus.Taygeta.Serialization
 {
     public class SimpleSerializedObject<T> : ISerializedObject<T>
     {
-        public T Data { get; }
-        public ISerializedType Type { get; }
+        public T Content { get; }
+        object ISerializedObject.Content => Content;
+
+        public Type ContentType => typeof(T);
+        public ISerializedType SerializedType { get; }
 
         public SimpleSerializedObject(T data, ISerializedType type)
         {
@@ -14,8 +17,8 @@ namespace Qubitus.Taygeta.Serialization
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            Data = data;
-            Type = type;
+            Content = data;
+            SerializedType = type;
         }
 
         public override bool Equals (object obj)
@@ -26,7 +29,8 @@ namespace Qubitus.Taygeta.Serialization
                 return false;
             
             var typedObj = (SimpleSerializedObject<T>) obj;
-            return object.Equals(Data, typedObj.Data) && object.Equals(Type, typedObj.Type);
+            return object.Equals(Content, typedObj.Content) && 
+                object.Equals(SerializedType, typedObj.SerializedType);
         }
         
         public override int GetHashCode()
@@ -34,15 +38,15 @@ namespace Qubitus.Taygeta.Serialization
             unchecked
             {
                 int hash = 486187739;
-                hash = (hash * 16777619) ^ Data.GetHashCode();
-                hash = (hash * 16777619) ^ Type.GetHashCode();
+                hash = (hash * 16777619) ^ Content.GetHashCode();
+                hash = (hash * 16777619) ^ SerializedType.GetHashCode();
                 return hash;
             }
         }
 
         public override string ToString()
         {
-            return $"{nameof(SimpleSerializedObject<T>)}[{Type}]";
+            return $"{nameof(SimpleSerializedObject<T>)}[{SerializedType}]";
         }
     }
 }

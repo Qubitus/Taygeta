@@ -1,31 +1,31 @@
 using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Qubitus.Taygeta.Serialization
 {
     public abstract class Converter : IConverter
     {
-        public bool CanConvert<TSource, TTarget>()
+        public abstract bool CanConvert<TSource, TTarget>();
+
+        private readonly MethodInfo _convertMethodInfo = typeof(Converter).GetRuntimeMethods()
+            .Where(x => x.Name == nameof(Convert))
+            .Where(x => x.GetGenericArguments().Count() == 2)
+            .First();
+        public TTarget Convert<TTarget>(object source)
         {
-            throw new NotImplementedException();
+            var methodInfo = _convertMethodInfo.MakeGenericMethod(source.GetType(), typeof(TTarget));
+            return (TTarget) methodInfo.Invoke(this, new[] {source});
         }
 
-        public abstract TTarget Convert<TTarget>(object source)
-        {
-            var methodInfo = typeof(Converter).GetMethod(nameof(Convert<TSource,TTarget>));
-            
-        }
+        public abstract TTarget Convert<TSource, TTarget>(TSource original);
 
-        public TTarget Convert<TSource, TTarget>(object original)
+        public ISerializedObject<TTarget> Convert<TTarget>(ISerializedObject original)
         {
-            throw new NotImplementedException();
-        }
-
-        public ISerializedObject<TTarget> Convert<TSource, TTarget>(ISerializedObject<TSource> original)
-        {
-            if (typeof(TSource) == typeof(TTarget))
+            if (original.ContentType == typeof(TTarget))
                 return (ISerializedObject<TTarget>) original;
-
-            return new SimpleSerializedObject<TTarget>(Convert<TTarget>(original.Data), original.Type);
+            
+            return new SimpleSerializedObject<TTarget>(Convert<TTarget>(original.Content), original.SerializedType));
         }
     }
 }

@@ -1,12 +1,14 @@
+using Qubitus.Taygeta.Common;
+using Qubitus.Taygeta.Messaging;
+
 namespace Qubitus.Taygeta.Commanding
 {
     public interface ICommandBus 
     {
-        void Publish<TCommand, >(CommandMessage<T> command);
-        void Publish<TCommand, TCallback>(CommandMessage<TCommand> command, CommandCallback<TCallback, TResult> callback)
-            where TCallback : TCommand;
-
-        Registration Subscribe(string commandName, MessageHandler<CommandMessage<object>> handler);
-
+        void Publish<TCommand>(ICommandMessage<TCommand> command)
+            where TCommand : class;
+        void Publish<TCommand, TResult>(ICommandMessage<TCommand> command, ICommandCallback<TCommand, TResult> callback);
+        IRegistration Subscribe<TCommandMessage>(string commandName, IMessageHandler<TCommandMessage> handler)
+            where TCommandMessage : ICommandMessage;
     }
 }
