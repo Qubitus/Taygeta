@@ -32,7 +32,7 @@ namespace Qubitus.Taygeta.Messaging
             Metadata = metadata;
         }
 
-        protected override Message<T> WithMetadata(Metadata metadata)
+        protected override IMessage WithMetadata(Metadata metadata)
         {
             return new GenericMessage<T>(this, metadata);
         }

@@ -7,7 +7,8 @@ namespace Qubitus.Taygeta.Commanding
     {
         void Publish<TCommand>(ICommandMessage<TCommand> command)
             where TCommand : class;
-        void Publish<TCommand, TResult>(ICommandMessage<TCommand> command, ICommandCallback<TCommand, TResult> callback);
+        void Publish<TCommand, TResult>(ICommandMessage<TCommand> command, ICommandCallback<TCommand, TResult> callback)
+            where TCommand : class;
         IRegistration Subscribe<TCommandMessage>(string commandName, IMessageHandler<TCommandMessage> handler)
             where TCommandMessage : ICommandMessage;
     }

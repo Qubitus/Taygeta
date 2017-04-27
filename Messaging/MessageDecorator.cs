@@ -10,8 +10,8 @@ namespace Qubitus.Taygeta.Messaging
 
         protected IMessage<T> Delegate;
         public string Identifier => Delegate.Identifier;
-        object IMessage.Payload => Payload;
         public T Payload => Delegate.Payload;
+        object IMessage.Payload => Payload;
         public Metadata Metadata => Delegate.Metadata;
 
         private SerializedObjectHolder SerializedObjectHolder
@@ -48,14 +48,8 @@ namespace Qubitus.Taygeta.Messaging
             return SerializedObjectHolder.SerializeMetadata<TTarget>(serializer);
         }
 
-        protected abstract MessageDecorator<T> WithMetadata(IDictionary<string, object> metadata);
-        protected abstract MessageDecorator<T> WithMetadataUnion(IDictionary<string, object> metadata);
-
-        IMessage IMessage.WithMetadata(IDictionary<string, object> metadata) => WithMetadata(metadata);
-        IMessage IMessage.WithMetadataUnion(IDictionary<string, object> metadata) => WithMetadataUnion(metadata);
-
-        IMessage<T> IMessage<T>.WithMetadata(IDictionary<string, object> metadata) => WithMetadata(metadata);
-        IMessage<T> IMessage<T>.WithMetadataUnion(IDictionary<string, object> metadata) => WithMetadataUnion(metadata);
+        public abstract IMessage WithMetadata(IDictionary<string, object> metadata);
+        public abstract IMessage WithMetadataUnion(IDictionary<string, object> metadata);
     }
 }
 

@@ -1,3 +1,6 @@
+using Qubitus.Taygeta.Common.Transaction;
+using Qubitus.Taygeta.Monitoring;
+
 namespace Qubitus.Taygeta.Commanding
 {
     public class SimpleCommandBus : CommandBus
@@ -5,13 +8,13 @@ namespace Qubitus.Taygeta.Commanding
         private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(SimpleCommandBus));
 
         public SimpleCommandBus()
-            : this(NoTransactionManager.INSTANCE, NoOpMessageMonitor.INSTANCE)
+            : this(NoTransactionManager.Instance, NoOpMessageMonitor.Instance)
         {
         }
 
-        public SimpleCommandBus(ITransactionManager transactionManager,
-            IMessageMonitor)
+        public SimpleCommandBus(ITransactionManager transactionManager, IMessageMonitor<ICommandMessage<object>> messageMonitor)
         {
+            
         }
     }
 }

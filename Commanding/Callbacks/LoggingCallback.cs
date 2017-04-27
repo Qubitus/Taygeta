@@ -5,7 +5,7 @@ namespace Qubitus.Taygeta.Commanding.Callbacks
     public class LoggingCallback : ICommandCallback<object, object>
     {
         private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(LoggingCallback));
-        public static readonly LoggingCallback INSTANCE = new LoggingCallback();
+        public static readonly LoggingCallback Instance = new LoggingCallback();
 
         private LoggingCallback() 
         {
