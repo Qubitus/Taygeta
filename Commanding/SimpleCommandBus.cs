@@ -11,6 +11,7 @@ namespace Qubitus.Taygeta.Commanding
 
         private readonly ConcurrentDictionary<string, IMessageHandler<IMessage>> subscription = 
             new ConcurrentDictionary<string, IMessageHandler<IMessage>>();
+        private readonly SynchronizedCollection<IMessageHandlerInterceptor
 
         protected ITransactionManager TransactionManager { get; }
         protected IMessageMonitor MessageMonitor { get; }
