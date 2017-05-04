@@ -1,13 +1,15 @@
 using System;
 using Qubitus.Taygeta.Messaging;
 
-namespace Qubitus.Taygeta.UnitOfWork
+namespace Qubitus.Taygeta.Messaging.UnitOfWork
 {
-    public interface IUnitOfWork<TMessage>
+    public interface IUnitOfWork<out TMessage>
         where TMessage : IMessage
     {
         TMessage Message { get; }
         Metadata CorrelationData { get; }
+
+        Phase Phase { get; }
         IUnitOfWork<IMessage> Parent { get; }
 
         void Start();
@@ -23,24 +25,6 @@ namespace Qubitus.Taygeta.UnitOfWork
         void OnRollback(Action<IUnitOfWork<TMessage>> handler);
         void OnCleanup(Action<IUnitOfWork<TMessage>> handler);
 
-    }
-
-    public abstract class UnitOfWork<TMessage> : IUnitOfWork<TMessage>
-        where TMessage : IMessage
-    {
-        public bool IsRoot 
-        {
-            get
-            {
-                return Parent == null;
-            }
-        }
-        public void Rollback()
-        {
-            Rollback(null);
-        }
-
-        void OnPrepareSubmit(Action<IUnitOfWork<)
-
+        TResult ExecuteWithResult<TResult>(Action<TResult> action, IRollbackConfiguration rollbackConfiguration);
     }
 }

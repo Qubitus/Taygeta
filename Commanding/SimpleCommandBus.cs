@@ -5,7 +5,7 @@ using Qubitus.Taygeta.Monitoring;
 
 namespace Qubitus.Taygeta.Commanding
 {
-    public class SimpleCommandBus : CommandBus
+    public class SimpleCommandBus : ICommandBus
     {
         private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(SimpleCommandBus));
 

@@ -25,7 +25,7 @@ namespace Qubitus.Taygeta.Serialization
             if (original.ContentType == typeof(TTarget))
                 return (ISerializedObject<TTarget>) original;
             
-            return new SimpleSerializedObject<TTarget>(Convert<TTarget>(original.Content), original.SerializedType));
+            return new SimpleSerializedObject<TTarget>(Convert<TTarget>(original.Content), original.SerializedType);
         }
     }
 }
