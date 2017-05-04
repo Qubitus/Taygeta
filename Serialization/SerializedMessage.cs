@@ -38,7 +38,7 @@ namespace Qubitus.Taygeta.Serialization
         {
         }
 
-        protected override Message<T> WithMetadata(Metadata metadata)
+        protected override IMessage WithMetadata(Metadata metadata)
         {
             if (Metadata.Equals(metadata))
                 return this;

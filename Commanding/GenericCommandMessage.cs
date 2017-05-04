@@ -14,7 +14,7 @@ namespace Qubitus.Taygeta.Commanding
         }
 
         public GenericCommandMessage(TPayload payload, IDictionary<string, object> metadata)
-            : this(new GenericMessage(payload, metadata), typeof(T).Name)
+            : this(new GenericMessage<TPayload>(payload, metadata), typeof(TPayload).Name)
         {
         }
 
