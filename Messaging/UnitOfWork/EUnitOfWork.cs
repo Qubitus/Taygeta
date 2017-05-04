@@ -1,3 +1,6 @@
+using System;
+using Qubitus.Taygeta.Messaging.UnitOfWork.Rollback;
+
 namespace Qubitus.Taygeta.Messaging.UnitOfWork
 {
     public static class EUnitOfWork
@@ -18,8 +21,9 @@ namespace Qubitus.Taygeta.Messaging.UnitOfWork
         }
 
         public static TResult ExecuteWithResult<TMessage, TResult>(this IUnitOfWork<TMessage> uow, Action<TResult> action)
+            where TMessage : IMessage
         {
-            return uow.ExecuteWithResult(action, RollbackConfigurationType.AN)
+            return uow.ExecuteWithResult(action, new RollbackOnExceptionConfiguration());
         }
     }
 }

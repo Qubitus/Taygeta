@@ -24,5 +24,7 @@ namespace Qubitus.Taygeta.Messaging.UnitOfWork
 
         void OnRollback(Action<IUnitOfWork<TMessage>> handler);
         void OnCleanup(Action<IUnitOfWork<TMessage>> handler);
+
+        TResult ExecuteWithResult<TResult>(Action<TResult> action, IRollbackConfiguration rollbackConfiguration);
     }
 }
