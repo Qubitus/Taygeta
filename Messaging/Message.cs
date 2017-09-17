@@ -11,7 +11,7 @@ namespace Qubitus.Taygeta.Messaging
         public abstract T Payload { get; }
         public abstract Metadata Metadata { get; }
 
-        public Message(string identifier)
+        protected Message(string identifier)
         {
             Identifier = identifier;
         }
